@@ -34,29 +34,71 @@ document.addEventListener("DOMContentLoaded", function () {
         email: `alumno${i + 1}@example.com`,
         estatusAcademico: Math.random() < 0.5 ? "Activo" : "Inactivo",
         estatusInscripcion: Math.random() < 0.5 ? "Inscrito" : "No inscrito",
+        fechaNacimiento: '1990-01-01',
+        rfc: 'AAAA900101AAA',
+        estadoCivil: 'Soltero',
+        pais: 'México',
+        ciudadOrigen: 'Aguascalientes',
+        sexo: 'Masculino',
+        curp: 'AAAA900101HCCAAA00',
+        telefonoMovil: `+${Math.floor(Math.random() * 10000000000)}`,
+        nacionalidad: 'Mexicana',
+        estado: 'Aguascalientes',
       });
     }
-
     return datos;
   }
 
   function llenarTabla() {
     const datos = generarDatosAleatorios();
-
+  
     tabla.innerHTML = "";
-
+  
     for (const dato of datos) {
       const fila = document.createElement("tr");
-
-      for (const clave in dato) {
+      const camposParaMostrar = Object.keys(dato).slice(0, 7);
+  
+      for (const clave of camposParaMostrar) {
         const celda = document.createElement("td");
         celda.textContent = dato[clave];
         fila.appendChild(celda);
+  
+        // Agregar event listener a la celda del nombre del alumno
+        if (clave === "alumno") {
+          celda.style.cursor = "pointer";
+          celda.addEventListener("click", () => {
+            abrirModalDetallesAlumno(dato);
+          });
+        }
       }
-
+  
       tabla.appendChild(fila);
     }
   }
+  
+  function abrirModalDetallesAlumno(dato) {
+    // Llenar los campos del modal con la información del alumno
+    document.getElementById("nombre").textContent = dato.alumno;
+    document.getElementById("fechaNacimiento").textContent = dato.fechaNacimiento;
+    document.getElementById("rfc").textContent = dato.rfc;
+    document.getElementById("correo").textContent = dato.email;
+    document.getElementById("estadoCivil").textContent = dato.estadoCivil;
+    document.getElementById("pais").textContent = dato.pais;
+    document.getElementById("ciudadOrigen").textContent = dato.ciudadOrigen;
+    document.getElementById("sexo").textContent = dato.sexo;
+    document.getElementById("curp").textContent = dato.curp;
+    document.getElementById("telefonoMovil").textContent = dato.telefonoMovil;
+    document.getElementById("nacionalidad").textContent = dato.nacionalidad;
+    document.getElementById("estado").textContent = dato.estado;
+    document.getElementById("direccionModal").textContent = dato.direccion;
+    document.getElementById("telefonoModal").textContent = dato.telefono;
+    document.getElementById("alternativo").textContent = dato.alternativo;
+  
+    // Abrir el modal
+    const modal = new bootstrap.Modal(document.getElementById("modalDetallesAlumno"));
+    modal.show();
+  }
+  
   // Event listeners para los selects
   universidadesSelect.addEventListener("change", actualizarEtiquetas);
   periodosSelect.addEventListener("change", actualizarEtiquetas);
